@@ -28,6 +28,8 @@ func New<%= serviceCamelCase %>() <%= serviceCamelCase %>Interface {
 }
 <% for(endpoint of endpoints) { %>
 func (service <%= serviceCamelCase %>) <%= endpoint.methodName %>(ctx context.Context, req <%= endpoint.methodName %>Request) (<%= endpoint.methodName %>Response, error){
+
+	response := <%= endpoint.methodName %>Response{}
 	return <%= endpoint.methodName %>Response, nil
 }
 <% } %>
