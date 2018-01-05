@@ -2,12 +2,12 @@
 
 TITLE=<%= title %>
 ORG_NAME=<%= org %>
-APP_NAME=<%= app_name %>
+APP_NAME=<%= appName %>
 
 # Custom variables
 
 DB_HOST=postgres
 DB_PORT=5432
-DB_NAME=<%= db_name %>
+DB_NAME=<%= dbName %>
 DB_USER=postgres
 DB_PASS=postgres

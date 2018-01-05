@@ -7,7 +7,7 @@ import (
 	"net/http"
 	<% } %>
 	<% if(grpc){ %>
-	"<%= app_name %>/pkg/pb"
+	"<%= appName %>/pkg/pb"
 	<% } %>
 )
 

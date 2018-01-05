@@ -22,7 +22,7 @@ help:
 	echo
 
 proto:
-	./protoc pb/<%= app_name %>.proto --go_out=./pkg
+	./protoc pb/<%= appName %>.proto --go_out=./pkg
 
 base: <% if(grpc) { %>proto <% } %>
 	sudo docker build \

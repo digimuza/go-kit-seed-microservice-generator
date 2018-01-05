@@ -36,7 +36,7 @@ module.exports = class extends Generator {
 
       this.fs.copyTpl(
         this.templatePath('go-kit-seed/.vscode'),
-        this.destinationPath(parsedJson.app_name + '/.vscode'),
+        this.destinationPath(parsedJson.appName + '/.vscode'),
         parsedJson
       );
 
@@ -44,73 +44,73 @@ module.exports = class extends Generator {
         this.fs.copyTpl(
           this.templatePath('go-kit-seed/pb/service.proto'),
           this.destinationPath(
-            parsedJson.app_name + '/pb/' + parsedJson.app_name + '.proto'
+            parsedJson.appName + '/pb/' + parsedJson.appName + '.proto'
           ),
           parsedJson
         );
 
         this.fs.copy(
           this.templatePath('go-kit-seed/protoc'),
-          this.destinationPath(parsedJson.app_name + '/protoc')
+          this.destinationPath(parsedJson.appName + '/protoc')
         );
 
         this.fs.copy(
           this.templatePath('go-kit-seed/pkg'),
-          this.destinationPath(parsedJson.app_name + '/pkg')
+          this.destinationPath(parsedJson.appName + '/pkg')
         );
       }
 
       this.fs.copyTpl(
         this.templatePath('go-kit-seed/docker'),
-        this.destinationPath(parsedJson.app_name + '/docker'),
+        this.destinationPath(parsedJson.appName + '/docker'),
         parsedJson
       );
 
       this.fs.copyTpl(
         this.templatePath('go-kit-seed/src'),
-        this.destinationPath(parsedJson.app_name + '/src'),
+        this.destinationPath(parsedJson.appName + '/src'),
         parsedJson
       );
 
       this.fs.copyTpl(
         this.templatePath('go-kit-seed/_dockerignore'),
-        this.destinationPath(parsedJson.app_name + '/.dockerignore'),
+        this.destinationPath(parsedJson.appName + '/.dockerignore'),
         parsedJson
       );
 
       this.fs.copyTpl(
         this.templatePath('go-kit-seed/_gitignore'),
-        this.destinationPath(parsedJson.app_name + '/.gitignore'),
+        this.destinationPath(parsedJson.appName + '/.gitignore'),
         parsedJson
       );
 
       this.fs.copyTpl(
         this.templatePath('go-kit-seed/_env'),
-        this.destinationPath(parsedJson.app_name + '/.env'),
+        this.destinationPath(parsedJson.appName + '/.env'),
         parsedJson
       );
 
       this.fs.copyTpl(
         this.templatePath('go-kit-seed/makefile'),
-        this.destinationPath(parsedJson.app_name + '/makefile'),
+        this.destinationPath(parsedJson.appName + '/makefile'),
         parsedJson
       );
 
       this.fs.copyTpl(
         this.templatePath('go-kit-seed/makefile'),
-        this.destinationPath(parsedJson.app_name + '/makefile'),
+        this.destinationPath(parsedJson.appName + '/makefile'),
         parsedJson
       );
 
       this.fs.copyTpl(
         this.templatePath('go-kit-seed/Gopkg.lock'),
-        this.destinationPath(parsedJson.app_name + '/Gopkg.lock'),
+        this.destinationPath(parsedJson.appName + '/Gopkg.lock'),
         parsedJson
       );
 
       this.fs.copyTpl(
         this.templatePath('go-kit-seed/Gopkg.toml'),
-        this.destinationPath(parsedJson.app_name + '/Gopkg.toml'),
+        this.destinationPath(parsedJson.appName + '/Gopkg.toml'),
         parsedJson
       );
     });

@@ -12,7 +12,7 @@ services:
       - web
     labels:
       - "traefik.backend=${APP_NAME}"
-      - "traefik.frontend.rule=Host:<%= api_url %>;PathPrefixStrip:/${APP_NAME}"
+      - "traefik.frontend.rule=Host:<%= apiUrl %>;PathPrefixStrip:/${APP_NAME}"
       - "traefik.priority=10"
 
 networks:

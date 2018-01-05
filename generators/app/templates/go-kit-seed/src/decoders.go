@@ -10,7 +10,7 @@ import (
 	"github.com/gorilla/mux"
 	<% } %> 
 	<% if(grpc){ %>
-	"<%= app_name %>/pkg/pb"
+	"<%= appName %>/pkg/pb"
 	<% } %> 
 )
 <% if(http){ %>

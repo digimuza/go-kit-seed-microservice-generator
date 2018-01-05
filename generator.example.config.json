@@ -1,10 +1,10 @@
 {
   "title": "Sample Micro Service",
   "org": "awpc",
-  "app_name": "go-sample",
+  "appName": "go-sample",
   "serviceCamelCase": "SampleMicroService",
-  "db_name": "sample-go-sample-db",
-  "api_url": "sample.docker.url",
+  "dbName": "sample-go-sample-db",
+  "apiUrl": "sample.docker.url",
   "endpoints": [
     {
       "method": "GET",
