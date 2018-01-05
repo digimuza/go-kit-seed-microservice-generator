@@ -11,7 +11,7 @@ import (
 // <%= serviceCamelCase %>Interface - Main service interface
 type <%= serviceCamelCase %>Interface interface {
 	<% for(endpoint of endpoints) { %>
-		<%= endpoint.methodName %>(ctx context.Context, req <%= endpoint.methodName %>Request) (<%= endpoint.methodName %>Response, error)
+	<%= endpoint.methodName %>(ctx context.Context, req <%= endpoint.methodName %>Request) (<%= endpoint.methodName %>Response, error)
 	<% } %>
 }
 

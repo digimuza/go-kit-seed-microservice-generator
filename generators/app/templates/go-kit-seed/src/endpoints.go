@@ -15,7 +15,7 @@ type Endpoints struct {
 func NewEndpoints(service <%= serviceCamelCase %>Interface) Endpoints {
 	return Endpoints{
 	<% for(endpoint of endpoints) { %>
-		<%= endpoint.methodName %>: new<%= endpoint.methodName %>Endpoint(service),
+	<%= endpoint.methodName %>: new<%= endpoint.methodName %>Endpoint(service),
 	<% } %>
 	}
 }
@@ -31,6 +31,5 @@ func new<%= endpoint.methodName %>Endpoint(service <%= serviceCamelCase %>Interf
 		response,err := service.<%= endpoint.methodName %>(ctx,req)
 		return response, err
 	}
-	
 }
 <% } %>

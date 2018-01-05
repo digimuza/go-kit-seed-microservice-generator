@@ -21,7 +21,10 @@ help:
 	echo
 	echo
 
-base:
+proto:
+	./protoc pb/<%= app_name %>.proto --go_out=./pkg
+
+base: <% if(grpc) { %>proto <% } %>
 	sudo docker build \
 		-f docker/base/Dockerfile \
 		-t $(ORG_NAME)/$(APP_NAME):base \

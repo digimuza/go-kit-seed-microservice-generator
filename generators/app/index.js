@@ -40,6 +40,26 @@ module.exports = class extends Generator {
         parsedJson
       );
 
+      if (parsedJson.grpc) {
+        this.fs.copyTpl(
+          this.templatePath('go-kit-seed/pb/service.proto'),
+          this.destinationPath(
+            parsedJson.app_name + '/pb/' + parsedJson.app_name + '.proto'
+          ),
+          parsedJson
+        );
+
+        this.fs.copy(
+          this.templatePath('go-kit-seed/protoc'),
+          this.destinationPath(parsedJson.app_name + '/protoc')
+        );
+
+        this.fs.copy(
+          this.templatePath('go-kit-seed/pkg'),
+          this.destinationPath(parsedJson.app_name + '/pkg')
+        );
+      }
+
       this.fs.copyTpl(
         this.templatePath('go-kit-seed/docker'),
         this.destinationPath(parsedJson.app_name + '/docker'),
