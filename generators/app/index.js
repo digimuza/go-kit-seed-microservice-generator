@@ -1,7 +1,5 @@
 'use strict';
 const Generator = require('yeoman-generator');
-const chalk = require('chalk');
-const yosay = require('yosay');
 const fs = require('fs');
 module.exports = class extends Generator {
   constructor(args, opts) {
@@ -15,13 +13,6 @@ module.exports = class extends Generator {
   }
 
   prompting() {
-    // Have Yeoman greet the user.
-    this.log(
-      yosay(
-        'Welcome to PASSCAMP ' + chalk.red('generator-go-kit-generator') + ' generator!'
-      )
-    );
-
     const prompts = [];
 
     return this.prompt(prompts).then(props => {
