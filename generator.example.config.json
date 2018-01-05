@@ -1,0 +1,27 @@
+{
+  "title": "Sample Micro Service",
+  "org": "awpc",
+  "app_name": "go-sample",
+  "serviceCamelCase": "SampleMicroService",
+  "db_name": "sample-go-sample-db",
+  "api_url;": "sample.docker.url",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/{userID}",
+      "methodName": "GetUserByID"
+    },
+    {
+      "method": "POST",
+      "path": "/",
+      "methodName": "CreateNewUser"
+    },
+    {
+      "method": "PATCH",
+      "path": "/",
+      "methodName": "UpdateUser"
+    }
+  ],
+  "grpc": true,
+  "http": true
+}

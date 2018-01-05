@@ -1,0 +1,20 @@
+version: '3'
+services:
+  db:
+    build:
+      context: postgres/
+    environment: 
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_DB=${DB_NAME}
+      - PGDATA=/var/lib/postgresql/data/${DB_NAME}
+  test_app:
+    build:
+      context: .
+      args:
+        - ORG_NAME=${ORG_NAME}
+        - APP_NAME=${APP_NAME}
+    env_file:
+      - ../../.env
+    links:
+      - db:${DB_HOST}

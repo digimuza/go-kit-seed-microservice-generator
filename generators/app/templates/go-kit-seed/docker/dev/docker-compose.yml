@@ -1,0 +1,21 @@
+version: '3'
+services:
+  app:
+    image: ${ORG_NAME}/${APP_NAME}:dev
+    container_name: ${APP_NAME}
+    env_file:
+      - ../../.env
+    restart: on-failure
+    volumes:
+      - ../../src:/go/src/app/src
+    networks:
+      - web
+    labels:
+      - "traefik.backend=${APP_NAME}"
+      - "traefik.frontend.rule=Host:<%= api_url %>;PathPrefixStrip:/${APP_NAME}"
+      - "traefik.priority=10"
+
+networks:
+  web:
+    external:
+      name: awpc_webgateway

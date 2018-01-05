@@ -1,0 +1,9 @@
+{
+  "generator-node": {
+    "promptValues": {
+      "authorName": "Andrius Mozuraitis",
+      "authorEmail": "andrius.mozuraitis@adeoweb.lt",
+      "authorUrl": "www.dimuza.com"
+    }
+  }
+}

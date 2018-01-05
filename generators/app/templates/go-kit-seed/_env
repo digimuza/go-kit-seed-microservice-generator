@@ -1,0 +1,13 @@
+# App desciption
+
+TITLE=<%= title %>
+ORG_NAME=<%= org %>
+APP_NAME=<%= app_name %>
+
+# Custom variables
+
+DB_HOST=postgres
+DB_PORT=5432
+DB_NAME=<%= db_name %>
+DB_USER=postgres
+DB_PASS=postgres
