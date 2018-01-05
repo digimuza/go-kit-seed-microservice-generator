@@ -15,7 +15,7 @@ Then generate your new project:
 Please create config file first. Check [generator.example.config.json file](https://github.com/digimuza/go-kit-seed-microservice-generator/blob/master/generator.example.config.json) 
 
 ```bash
-yo generator-go-kit-seed-microservice {config-file-path}
+yo go-kit-seed-microservice {config-file-path}
 ```
 
 ## Getting To Know Yeoman
