@@ -1,6 +1,6 @@
 {
-  "name": "go-kit-generator",
-  "version": "0.0.0",
+  "name": "go-kit-seed-microservice-generator",
+  "version": "0.0.1",
   "description": "",
   "homepage": "https://github.com/digimuza/go-kit-seed-microservice-generator",
   "author": {
