@@ -3,10 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"time"
-
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"golang.org/x/net/context"
 )
 
@@ -30,7 +26,7 @@ func New<%= serviceCamelCase %>() <%= serviceCamelCase %>Interface {
 func (service <%= serviceCamelCase %>) <%= endpoint.methodName %>(ctx context.Context, req <%= endpoint.methodName %>Request) (<%= endpoint.methodName %>Response, error){
 
 	response := <%= endpoint.methodName %>Response{}
-	return <%= endpoint.methodName %>Response, nil
+	return response, nil
 }
 <% } %>
 func getDBUrl() string {

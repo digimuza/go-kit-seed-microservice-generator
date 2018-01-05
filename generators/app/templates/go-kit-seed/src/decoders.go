@@ -30,7 +30,7 @@ import (
 		<% } %> 
 		<% if(endpoint.method === "GET" || endpoint.method === "DELETE"){ %>
 		 	vars := mux.Vars(r)
-			userID, ok := vars["userID"]
+			_, ok := vars["userID"]
 			if !ok {
 				return nil, NewError(http.StatusBadRequest, "UserID not found")
 			}

@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-
 	"github.com/go-kit/kit/endpoint"
 	"golang.org/x/net/context"
 )
@@ -23,13 +21,15 @@ func NewEndpoints(service <%= serviceCamelCase %>Interface) Endpoints {
 }
 <% for(endpoint of endpoints) { %>
 func new<%= endpoint.methodName %>Endpoint(service <%= serviceCamelCase %>Interface) endpoint.Endpoint {
-	return func(ctx context.Context, request interface{}) (response interface{}, err error) {
-		req := request.(<%= endpoint.methodName %>Request)
-		
-		// Endpoint logic
+	return func(ctx context.Context, request interface{}) (interface{},error) {
+		req,ok := request.(<%= endpoint.methodName %>Request)
 
-		response := <%= endpoint.methodName %>Response{}
-		return response, nil
+		if !ok{
+			return nil, NewError(500,"Failed to parse <%= endpoint.methodName %>Request")
+		}
+		// Endpoint logic
+		response,err := service.<%= endpoint.methodName %>(ctx,req)
+		return response, err
 	}
 	
 }

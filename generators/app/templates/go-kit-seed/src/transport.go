@@ -17,15 +17,13 @@ func NewHTTPHandler(s <%= serviceCamelCase %>Interface, logger log.Logger) http.
 	r := mux.NewRouter()
 	e := NewEndpoints(s)
 
-
 	<% for(endpoint of endpoints) { %>
-		r.Methods("<%= endpoint.method %>").Path("<%= endpoint.path %>").Handler(httptransport.NewServer(
-			e.<%= endpoint.method %>,
-			decode<%= endpoint.method %>Request,
-			encodeResponse,
-			options...,
-		))
+	r.Methods("<%= endpoint.method %>").Path("<%= endpoint.path %>").Handler(httptransport.NewServer(
+		e.<%= endpoint.methodName %>,
+		decode<%= endpoint.methodName %>Request,
+		encodeResponse,
+		options...,
+	))
 	<% } %>
-
 	return r
 }
