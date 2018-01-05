@@ -12,9 +12,7 @@ npm install -g go-kit-seed-microservice-generator
 
 Then generate your new project:
 
-Please create config file first. Check generator.example.config.json file
-
-[example-config]: (https://github.com/digimuza/go-kit-seed-microservice-generator/blob/master/generator.example.config.json)
+Please create config file first. Check [generator.example.config.json file](https://github.com/digimuza/go-kit-seed-microservice-generator/blob/master/generator.example.config.json) 
 
 ```bash
 yo go-kit-seed-microservice-generator {config-file-path}
