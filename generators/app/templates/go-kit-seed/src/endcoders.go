@@ -2,15 +2,11 @@ package main
 
 import (
 	"context"
-	<% if(http){ %>
+	"fmt"<% if(http){ %>
 	"encoding/json"
-	"net/http"
-	<% } %>
-	<% if(grpc){ %>
-	"<%= appName %>/pkg/pb"
-	<% } %>
+	"net/http"<% } %><% if(grpc){ %>
+	"<%= org %>/<%= appName %>/pkg/pb"<% } %>
 )
-
 <% if(http){ %>
 func encodeResponse(ctx context.Context, w http.ResponseWriter, response interface{}) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -29,20 +25,16 @@ func encodeError(_ context.Context, err error, w http.ResponseWriter) {
 	w.WriteHeader(sErr.StatusCode)
 	json.NewEncoder(w).Encode(sErr)
 }
-<% } %>
-
-<% if(grpc){ %>
-	
+<% } %><% if(grpc){ %>
 //GRPC Encoders - proto file should be builded and in
 <% for(endpoint of endpoints) { %>
-encodeGRPC<%= endpoint.methodName %>Request(_ context.Context, request interface{}) (interface{}, error){
+func encodeGRPC<%= endpoint.methodName %>Request(_ context.Context, request interface{}) (interface{}, error){
 	req:= request.(<%= endpoint.methodName %>Request)
+	fmt.Println(req)
 	return &pb.<%= endpoint.methodName %>Request{},nil
 }
-encodeGRPC<%= endpoint.methodName %>Response(_ context.Context, request interface{}) (interface{}, error){
+func encodeGRPC<%= endpoint.methodName %>Response(_ context.Context, request interface{}) (interface{}, error){
 	req:= request.(<%= endpoint.methodName %>Response)
+	fmt.Println(req)
 	return &pb.<%= endpoint.methodName %>Response{},nil
-}
-<% } %>
-
-<% } %> 
+}<% } %><% } %> 

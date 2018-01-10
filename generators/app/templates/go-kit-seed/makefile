@@ -21,47 +21,75 @@ help:
 	echo
 	echo
 
+fetch-frontend:
+	docker cp traefik:/cert .
+
+generate-certificate: fetch-frontend
+	openssl req -x509 -nodes -days 365 \
+	-newkey rsa:2048 \
+	-keyout ./cert/backend.key -out ./cert/backend.cert \
+	-subj "/C=LT/ST=Lithuania/L=Kaunas/O=awpc/CN=be-keys-go""/C=LT/ST=Lithuania/L=Kaunas/O=$(ORG_NAME)/CN=$(APP_NAME)"
+
 proto:
-	./protoc pb/<%= appName %>.proto --go_out=./pkg
+	./protoc pb/<%= appName %>.proto --go_out=plugins=grpc:./pkg
 
 base: <% if(grpc) { %>proto <% } %>
-	sudo docker build \
+	docker build \
 		-f docker/base/Dockerfile \
 		-t $(ORG_NAME)/$(APP_NAME):base \
 		docker/base
 
 go: base
-	sudo docker build \
+	docker build \
 		--build-arg ORG_NAME=$(ORG_NAME) \
 		--build-arg APP_NAME=$(APP_NAME) \
 		-f docker/go/Dockerfile \
 		-t $(ORG_NAME)/$(APP_NAME):go \
 		docker/go
 
-install: go
-	sudo docker build \
+install: go generate-certificate
+	docker build \
 		--build-arg ORG_NAME=$(ORG_NAME) \
 		--build-arg APP_NAME=$(APP_NAME) \
 		-f docker/install/Dockerfile \
 		-t $(ORG_NAME)/$(APP_NAME):install .
 
 test-clean:
-	sudo docker-compose \
+	docker-compose \
 		-f docker/test/docker-compose.yml \
 		rm -fsv || true
 
 test-build: test-clean install
-	sudo docker-compose \
+	docker-compose \
 		-f docker/test/docker-compose.yml \
 		build
 
 test: test-build
-	sudo docker-compose \
+	docker-compose \
 		-f docker/test/docker-compose.yml \
 		up 
 
+# DEBUG
+
+
+debug-build: install
+	docker build \
+		--build-arg ORG_NAME=$(ORG_NAME) \
+		--build-arg APP_NAME=$(APP_NAME) \
+		-f docker/debug/Dockerfile \
+		-t $(ORG_NAME)/$(APP_NAME):debug \
+		docker/debug
+
+debug: stop 
+	docker rm -f $(APP_NAME)
+	docker run \
+		--security-opt=seccomp:unconfined \
+		--network=awpc_webgateway \
+		--env-file=.env \
+		-p 2345:2345 --name $(APP_NAME) --rm $(ORG_NAME)/$(APP_NAME):debug
+
 start-build: start-clean install
-	sudo docker build \
+	docker build \
 		--build-arg ORG_NAME=$(ORG_NAME) \
 		--build-arg APP_NAME=$(APP_NAME) \
 		-f docker/dev/Dockerfile \
@@ -69,30 +97,39 @@ start-build: start-clean install
 		docker/dev
 
 start-clean:
-	sudo docker-compose \
+	docker-compose \
 		-f docker/dev/docker-compose.yml \
 		-p $(APP_NAME) \
 		rm -fsv || true
 
 start-create-db:
-	sudo docker exec \
+	docker exec \
 		-itu postgres postgres \
 		psql -c "SELECT create_db('$(DB_NAME)')"
 
-start: start-build start-create-db
-	sudo docker-compose \
+start: start-build start-create-db resume
+
+stop:
+	docker-compose \
+		-f docker/dev/docker-compose.yml \
+		-p $(APP_NAME) \
+		stop
+
+resume: 
+	docker rm -f $(APP_NAME)
+	docker-compose \
 		-f docker/dev/docker-compose.yml \
 		-p $(APP_NAME) \
 		up
 
 publish: install
-	sudo docker build \
+	docker build \
 		--build-arg ORG_NAME=$(ORG_NAME) \
 		--build-arg APP_NAME=$(APP_NAME) \
 		-f docker/prod/Dockerfile \
 		-t $(ORG_NAME)/$(APP_NAME):latest \
 		docker/prod
-	sudo docker push $(ORG_NAME)/$(APP_NAME):latest
+	# docker push $(ORG_NAME)/$(APP_NAME):latest
 
 deps:
 	echo "  Dependencies: "

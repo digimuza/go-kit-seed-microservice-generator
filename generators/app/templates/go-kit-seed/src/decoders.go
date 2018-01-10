@@ -2,15 +2,15 @@ package main
 
 import (
 	"context"
+	"fmt"
 	<% if(http){ %>
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	valid "github.com/asaskevich/govalidator"
 	"github.com/gorilla/mux"
 	<% } %> 
 	<% if(grpc){ %>
-	"<%= appName %>/pkg/pb"
+	"<%= org %>/<%= appName %>/pkg/pb"
 	<% } %> 
 )
 <% if(http){ %>
@@ -48,13 +48,15 @@ func decode<%= endpoint.methodName %>Request(_ context.Context, r *http.Request)
  <% if(grpc){ %>
 //GRPC Encoders - proto file should be builded and in
 <% for(endpoint of endpoints) { %>
-decodeGRPC<%= endpoint.methodName %>Request(_ context.Context, grpcRequest interface{}) (interface{}, error){
+func decodeGRPC<%= endpoint.methodName %>Request(_ context.Context, grpcRequest interface{}) (interface{}, error){
 	req:= grpcRequest.(*pb.<%= endpoint.methodName %>Request)
-	return <%= endpoint.methodName %>Request{response},nil
+	fmt.Println(req)
+	return <%= endpoint.methodName %>Request{},nil
 }
-decodeGRPC<%= endpoint.methodName %>Response(_ context.Context, grpcResponse interface{}) (interface{}, error){
+func decodeGRPC<%= endpoint.methodName %>Response(_ context.Context, grpcResponse interface{}) (interface{}, error){
 	response:= grpcResponse.(*pb.<%= endpoint.methodName %>Response)
-	return <%= endpoint.methodName %>Response{response},nil
+	fmt.Println(response)
+	return <%= endpoint.methodName %>Response{},nil
 }
 <% } %>
 <% } %> 

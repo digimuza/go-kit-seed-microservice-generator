@@ -1,18 +1,20 @@
 package main
 
 import (
-
-	"github.com/go-kit/kit/log"
+	"os"
+	"fmt"
+	"context"
 	<% if(http){ %>
 	"net/http"
 	httptransport "github.com/go-kit/kit/transport/http"
 	"github.com/gorilla/mux"
 	<% } %>
-	
 	<% if(grpc){ %>
-	"<%= appName %>/pkg/pb"
+	grpctransport "github.com/go-kit/kit/transport/grpc"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
+	"<%= org %>/<%= appName %>/pkg/pb"
 	<% } %>
-
 )
 <% if(http){ %>
 // NewHTTPHandler - Creates new http.Handler
@@ -44,12 +46,7 @@ type grpcServer struct {
 	
 }
 
-func NewGRPCServer(s <%= serviceCamelCase %>Interface, logger log.Logger) pb.<%= serviceCamelCase %>Server {
-	options := []httptransport.ServerOption{
-		httptransport.ServerErrorLogger(logger),
-		httptransport.ServerErrorEncoder(encodeError),
-	}
-
+func NewGRPCServer(s <%= serviceCamelCase %>Interface) pb.<%= serviceCamelCase %>Server {
 	e := NewEndpoints(s)
 	return &grpcServer{
 
@@ -58,14 +55,34 @@ func NewGRPCServer(s <%= serviceCamelCase %>Interface, logger log.Logger) pb.<%=
 			e.<%= endpoint.methodName %>,
 			decodeGRPC<%= endpoint.methodName %>Request,
 			encodeGRPC<%= endpoint.methodName %>Response,
-			options...,
 		),
 		<% } %>
 	}
 }
 
+func NewGRPCBaseServer(grpcServerTarget string, logger log.Logger) (*grpc.Server,error){
+	// Read cert and key file
+
+	creds, err := credentials.NewServerTLSFromFile(
+		"/cert/backend.cert",
+		"/cert/backend.key",
+	)
+	if err != nil {
+		return nil,err
+	}
+	// Create credentials
+	creds := credentials.NewServerTLSFromFi(&cert)
+
+	// Use Credentials in gRPC server options
+	serverOption := grpc.Creds(creds)
+
+	baseServer := grpc.NewServer(serverOption)
+
+	return baseServer,nil
+}
+
 <% for(endpoint of endpoints) { %>
-func (server *grpcServer) Sum(ctx oldcontext.Context, req *pb.<%= endpoint.methodName %>Request) (*pb.<%= endpoint.methodName %>Response, error) {
+func (server *grpcServer) <%= endpoint.methodName %>(ctx context.Context, req *pb.<%= endpoint.methodName %>Request) (*pb.<%= endpoint.methodName %>Response, error) {
 	_, rep, err := server.<%= endpoint.methodName.toLowerCase() %>.ServeGRPC(ctx, req)
 	if err != nil {
 		return nil, err

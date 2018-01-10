@@ -2,7 +2,10 @@ ARG ORG_NAME
 ARG APP_NAME
 FROM $ORG_NAME/$APP_NAME:go
 
-ENV APPPATH ${GOPATH}/src/app
+ARG ORG_NAME
+ARG APP_NAME
+
+ENV APPPATH ${GOPATH}/src/${ORG_NAME}/${APP_NAME}
 
 RUN go get github.com/golang/dep \
  && cd $GOPATH/src/github.com/golang/dep \
@@ -11,6 +14,11 @@ RUN go get github.com/golang/dep \
 WORKDIR ${APPPATH}
 
 COPY /src ./src
+
+COPY /cert /cert
+
+COPY /pkg ./pkg
+
 COPY /Gopkg.lock ./Gopkg.lock
 COPY /Gopkg.toml ./Gopkg.toml
 

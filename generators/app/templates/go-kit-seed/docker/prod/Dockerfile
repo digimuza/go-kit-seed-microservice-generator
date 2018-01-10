@@ -8,4 +8,4 @@ RUN go build  -ldflags '-w -s' -a -installsuffix cgo -o /bin/app
 FROM scratch
 COPY --from=builder /bin/app /
 CMD [ "/app" ]
-EXPOSE 80
+EXPOSE 443

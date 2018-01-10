@@ -1,6 +1,7 @@
 'use strict';
 const Generator = require('yeoman-generator');
 const fs = require('fs');
+// Const { execSync } = require('child_process');
 module.exports = class extends Generator {
   constructor(args, opts) {
     super(args, opts);
@@ -32,7 +33,7 @@ module.exports = class extends Generator {
       }
 
       const parsedJson = JSON.parse(data);
-      console.log(parsedJson.endpoints);
+      this.parsedJson = parsedJson;
 
       this.fs.copyTpl(
         this.templatePath('go-kit-seed/.vscode'),
@@ -53,13 +54,11 @@ module.exports = class extends Generator {
           this.templatePath('go-kit-seed/protoc'),
           this.destinationPath(parsedJson.appName + '/protoc')
         );
-
-        this.fs.copy(
-          this.templatePath('go-kit-seed/pkg'),
-          this.destinationPath(parsedJson.appName + '/pkg')
-        );
       }
-
+      this.fs.copy(
+        this.templatePath('go-kit-seed/pkg'),
+        this.destinationPath(parsedJson.appName + '/pkg')
+      );
       this.fs.copyTpl(
         this.templatePath('go-kit-seed/docker'),
         this.destinationPath(parsedJson.appName + '/docker'),
@@ -91,6 +90,12 @@ module.exports = class extends Generator {
       );
 
       this.fs.copyTpl(
+        this.templatePath('go-kit-seed/README.md'),
+        this.destinationPath(parsedJson.appName + '/README.md'),
+        parsedJson
+      );
+
+      this.fs.copyTpl(
         this.templatePath('go-kit-seed/makefile'),
         this.destinationPath(parsedJson.appName + '/makefile'),
         parsedJson
@@ -115,7 +120,8 @@ module.exports = class extends Generator {
       );
     });
   }
-  install() {
+  end() {
     // This.installDependencies();
+    console.log('asdjhaskj');
   }
 };
