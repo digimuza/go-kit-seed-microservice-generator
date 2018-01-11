@@ -11,29 +11,21 @@ import (
 	"google.golang.org/grpc/credentials"
 	<% } %> 
 )
-
-func TestGRPCConnection(t *testing.T) {
-
-	// Create credentials
-	credsClient, err := credentials.NewClientTLSFromFile("../cert/frontend.cert", "")
-	if err !=nil{
-		t.Errorf(err.Error())
-	}
-
-	dialTarget := fmt.Sprintf("%s.%s:%d",os.Getenv("APP_NAME"),"passcamp.doc",443)
-
-	conn, err := grpc.Dial(dialTarget, grpc.WithTransportCredentials(credsClient))
-	if err != nil {
-		t.Errorf(err.Error())
-	} else {
-	}
-	client := pb.NewBeKeysGoServiceClient(conn)
-	request := &pb.GetUserByIDRequest{Id: "SampleID"}
-
-	_, err = client.GetUserByID(context.Background(), request)
+<% if(grpc){ %>
+<% for(endpoint of endpoints) { %>
+func Test<%= endpoint.methodName %>GRPCConnection(t *testing.T){
+	client, conn, err := NewGRPCClient()
 
 	if err != nil {
 		t.Errorf(err.Error())
-	} 
+	}
+	request := &pb.<%= endpoint.methodName %>Request{}
+
+	response, callError := client.<%= endpoint.methodName %>(context.Background(), request)
+
+	t.Errorf("Tests is not implemented")
+
 	defer conn.Close()
 }
+<% } %>
+<% } %> 
