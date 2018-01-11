@@ -9,17 +9,65 @@
     {
       "method": "GET",
       "path": "/{userID}",
-      "methodName": "GetUserByID"
+      "methodName": "GetUserByID",
+      "parrams": {
+        "request": [
+          {
+            "goKey": "UserID",
+            "jsonKey": "userID"
+          }
+        ],
+        "response": [
+          {
+            "goKey": "UserID",
+            "jsonKey": "userID"
+          },
+          {
+            "goKey": "PublicKey",
+            "jsonKey": "publicKey"
+          },
+          {
+            "goKey": "PrivateKey",
+            "jsonKey": "privateKey"
+          }
+        ]
+      }
     },
     {
       "method": "POST",
       "path": "/",
-      "methodName": "CreateNewUser"
+      "methodName": "CreateNewUser",
+      "parrams": {
+        "request": [
+          {
+            "goKey": "UserID",
+            "jsonKey": "userID"
+          }
+        ],
+        "response": [
+          {
+            "goKey": "UserID",
+            "jsonKey": "userID"
+          },
+          {
+            "goKey": "PublicKey",
+            "jsonKey": "publicKey"
+          },
+          {
+            "goKey": "PrivateKey",
+            "jsonKey": "privateKey"
+          }
+        ]
+      }
     },
     {
       "method": "PATCH",
       "path": "/",
-      "methodName": "UpdateUser"
+      "methodName": "UpdateUser",
+      "parrams": {
+        "request": [],
+        "response": []
+      }
     }
   ],
   "grpc": true,

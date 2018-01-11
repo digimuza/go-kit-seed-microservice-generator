@@ -9,13 +9,14 @@ service <%= serviceCamelCase %> {
 }
 
 <% for(endpoint of endpoints) { %>
-message <%= endpoint.methodName %>Request {
-    string id  = 1;
+message <%= endpoint.methodName %>Request {<% for(p of endpoint.parrams.request) { %>
+    string <%= p.goKey %> = 1;
+<% } %>
 }
 <% } %>
 
 <% for(endpoint of endpoints) { %>
-message <%= endpoint.methodName %>Response {
-    string id  = 1;
-}
+message <%= endpoint.methodName %>Response {<% for(p of endpoint.parrams.response) { %>
+    string <%= p.goKey %> = 1;
+<% } %>}
 <% } %>
