@@ -110,7 +110,7 @@ start-create-db:
 		-itu postgres postgres \
 		psql -c "SELECT create_db('$(DB_NAME)')"
 
-init: start-build start-create-db debug-build
+init: reformat start-build start-create-db debug-build
 
 stop:
 	docker-compose \
@@ -118,7 +118,7 @@ stop:
 		-p $(APP_NAME) \
 		stop
 
-start: 
+start: reformat
 	docker rm -f $(APP_NAME) || true
 	docker-compose \
 		-f docker/dev/docker-compose.yml \
