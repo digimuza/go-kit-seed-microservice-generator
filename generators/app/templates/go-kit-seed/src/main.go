@@ -74,7 +74,7 @@ func main() {
 		}
 
 		grpcServer := NewGRPCServer(s)
-		pb.RegisterBeKeysGoServiceServer(baseServer, grpcServer)
+		pb.Register<%= serviceCamelCase %>Server(baseServer, grpcServer)
 		reflection.Register(baseServer)
 
 		err = baseServer.Serve(grpcListener)
