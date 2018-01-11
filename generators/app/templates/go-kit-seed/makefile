@@ -21,6 +21,9 @@ help:
 	echo
 	echo
 
+reformat: 
+	go fmt ./src
+
 fetch-frontend:
 	docker cp traefik:/cert .
 
@@ -107,7 +110,7 @@ start-create-db:
 		-itu postgres postgres \
 		psql -c "SELECT create_db('$(DB_NAME)')"
 
-start: start-build start-create-db resume
+init: start-build start-create-db debug-build
 
 stop:
 	docker-compose \
@@ -115,8 +118,8 @@ stop:
 		-p $(APP_NAME) \
 		stop
 
-resume: 
-	docker rm -f $(APP_NAME)
+start: 
+	docker rm -f $(APP_NAME) || true
 	docker-compose \
 		-f docker/dev/docker-compose.yml \
 		-p $(APP_NAME) \

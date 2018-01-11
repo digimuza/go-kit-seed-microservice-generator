@@ -16,7 +16,7 @@ func TestGRPCConnection(t *testing.T) {
 
 	// Create credentials
 	credsClient, err := credentials.NewClientTLSFromFile("../cert/frontend.cert", "")
-	if err !nil{
+	if err !=nil{
 		t.Errorf(err.Error())
 	}
 
@@ -30,7 +30,7 @@ func TestGRPCConnection(t *testing.T) {
 	client := pb.NewBeKeysGoServiceClient(conn)
 	request := &pb.GetUserByIDRequest{Id: "SampleID"}
 
-	res, err := client.GetUserByID(context.Background(), request)
+	_, err = client.GetUserByID(context.Background(), request)
 
 	if err != nil {
 		t.Errorf(err.Error())

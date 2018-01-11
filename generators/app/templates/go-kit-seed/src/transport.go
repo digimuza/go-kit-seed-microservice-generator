@@ -1,15 +1,15 @@
 package main
 
 import (
-	"os"
-	"fmt"
 	"context"
 	<% if(http){ %>
 	"net/http"
 	httptransport "github.com/go-kit/kit/transport/http"
+	
 	"github.com/gorilla/mux"
 	<% } %>
 	<% if(grpc){ %>
+	"github.com/go-kit/kit/log"
 	grpctransport "github.com/go-kit/kit/transport/grpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -60,6 +60,7 @@ func NewGRPCServer(s <%= serviceCamelCase %>Interface) pb.<%= serviceCamelCase %
 	}
 }
 
+//NewGRPCBaseServer Generate Base server with certifications
 func NewGRPCBaseServer(grpcServerTarget string, logger log.Logger) (*grpc.Server,error){
 	// Read cert and key file
 
@@ -70,9 +71,6 @@ func NewGRPCBaseServer(grpcServerTarget string, logger log.Logger) (*grpc.Server
 	if err != nil {
 		return nil,err
 	}
-	// Create credentials
-	creds := credentials.NewServerTLSFromFi(&cert)
-
 	// Use Credentials in gRPC server options
 	serverOption := grpc.Creds(creds)
 
@@ -90,6 +88,4 @@ func (server *grpcServer) <%= endpoint.methodName %>(ctx context.Context, req *p
 	return rep.(*pb.<%= endpoint.methodName %>Response), nil
 }
 <% } %>
-
-
 <% } %>

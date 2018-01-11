@@ -61,7 +61,11 @@ func main() {
 	<% if (grpc) { %>
 	go func() {
 		
-		baseServer := NewGRPCBaseServer(grpcListenPort,logger)
+		baseServer,err := NewGRPCBaseServer(grpcListenPort,logger)
+		if err !=nil {
+			logger.Log("transport", "GRPC", "addr", grpcListenPort, "err", err.Error())
+			errs <- err
+		}
 		grpcListener, err := net.Listen("tcp", grpcListenPort)
 		logger.Log("transport", "GRPC", "addr", grpcListenPort)
 		if err != nil {

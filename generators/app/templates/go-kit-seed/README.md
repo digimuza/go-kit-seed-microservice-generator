@@ -15,3 +15,6 @@ Make sure that awpc-dev-stack is running:
 ```sh
 $ make start
 ```
+
+## NOTES
+Each time you restart awpc-dev-stack you have to restart microservice also.

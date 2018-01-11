@@ -7,10 +7,11 @@ services:
       - ../../.env
     restart: on-failure
     volumes:
-      - ../../src:/go/src/app/src
+       - ../../src:/go/src/${ORG_NAME}/${APP_NAME}/src
     networks:
       - web
     labels:
+      - "traefik.protocol=https"
       - "traefik.backend=${APP_NAME}"
       - "traefik.frontend.rule=Host:${APP_NAME}.<%= apiUrl %>"
       - "traefik.priority=10"
