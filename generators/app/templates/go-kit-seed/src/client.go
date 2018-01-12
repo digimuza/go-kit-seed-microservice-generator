@@ -38,7 +38,7 @@ func NewGRPCClient(auth Authentication) (pb.<%= serviceCamelCase %>Client,*grpc.
 
 	conn, err := grpc.Dial(
 		dialTarget,
-		grpc.WithTransportCredentials(credsClient)
+		grpc.WithTransportCredentials(credsClient),
 		grpc.WithPerRPCCredentials(&auth),
 	)
 	if err != nil {
