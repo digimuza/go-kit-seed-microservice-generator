@@ -1,14 +1,23 @@
 package main
 
 import (
+	"fmt"
 	"testing"
 )
 
-func TestNew<%= serviceCamelCase %>(t *testing.T){
-	t.Errorf("Test is not implemented")
-}
 <% for(endpoint of endpoints) { %>
 func Test<%= endpoint.methodName %>(t *testing.T){
-	t.Errorf("Test is not implemented")
+
+	service := New<%= serviceCamelCase %>()
+
+	response, err := service.<%= endpoint.methodName %>(nil, <%= endpoint.methodName %>Request{})
+	
+	// Fail if any error
+	if err != nil {
+		t.Errorf(err.Error())
+	}
+
+	fmt.Println(response)
+	
 }
 <% } %>

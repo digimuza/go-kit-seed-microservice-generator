@@ -2,6 +2,7 @@ package main
 
 import (<% if(grpc){ %>
 	"fmt"
+	"context"
 	"os"
 	"<%= org %>/<%= appName %>/pkg/pb"
 	"google.golang.org/grpc"
@@ -31,7 +32,7 @@ func (a *Authentication) RequireTransportSecurity() bool {
 func NewGRPCClient(auth Authentication) (pb.<%= serviceCamelCase %>Client,*grpc.ClientConn, error) {
 	credsClient, err := credentials.NewClientTLSFromFile("../cert/frontend.cert", "")
 	if err != nil {
-		return nil, err
+		return nil,nil, err
 	}
 
 	dialTarget := fmt.Sprintf("%s.%s:%d", os.Getenv("APP_NAME"), "passcamp.doc", 443)
@@ -42,9 +43,9 @@ func NewGRPCClient(auth Authentication) (pb.<%= serviceCamelCase %>Client,*grpc.
 		grpc.WithPerRPCCredentials(&auth),
 	)
 	if err != nil {
-		return nil, err
+		return nil,conn,err
 	}
 	client := pb.New<%= serviceCamelCase %>Client(conn)
 
-	return client, nil
+	return client,conn, nil
 }

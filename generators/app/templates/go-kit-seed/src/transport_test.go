@@ -1,14 +1,11 @@
 package main
 
 import (
-	"os"
 	"context"
 	"fmt"
 	"testing"
 	<% if(grpc){ %>
 	"<%= org %>/<%= appName %>/pkg/pb"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials"
 	<% } %> 
 )
 
@@ -29,13 +26,12 @@ func Test<%= endpoint.methodName %>GRPCConnection(t *testing.T){
 
 	response, callError := client.<%= endpoint.methodName %>(context.Background(), request)
 
+	// Test response
+	fmt.Println(response)
+
 	if callError !=nil{
 		t.Errorf("Tests is not implemented")
 	}
-
-	fmt.Println(response)
-
-	t.Errorf("Tests is not implemented")
 
 	defer conn.Close()
 }
