@@ -8,8 +8,27 @@ import (<% if(grpc){ %>
 	"google.golang.org/grpc/credentials"<% } %> 
 )
 
+
+// Authentication holds valid current user uuid
+type Authentication struct {
+	JWT string
+}
+
+// GetRequestMetadata gets the current request metadata
+func (a *Authentication) GetRequestMetadata(context.Context, ...string) (map[string]string, error) {
+	return map[string]string{
+		"authentication": a.JWT,
+	}, nil
+}
+
+// RequireTransportSecurity indicates whether the credentials requires
+// transport security. Implementing PerRPCCredentials interface
+func (a *Authentication) RequireTransportSecurity() bool {
+	return false
+}
+
 // NewGRPCClient - New service grpc client
-func NewGRPCClient() (pb.<%= serviceCamelCase %>Client, error) {
+func NewGRPCClient(auth Authentication) (pb.<%= serviceCamelCase %>Client,*grpc.ClientConn, error) {
 	credsClient, err := credentials.NewClientTLSFromFile("../cert/frontend.cert", "")
 	if err != nil {
 		return nil, err
@@ -17,7 +36,11 @@ func NewGRPCClient() (pb.<%= serviceCamelCase %>Client, error) {
 
 	dialTarget := fmt.Sprintf("%s.%s:%d", os.Getenv("APP_NAME"), "passcamp.doc", 443)
 
-	conn, err := grpc.Dial(dialTarget, grpc.WithTransportCredentials(credsClient))
+	conn, err := grpc.Dial(
+		dialTarget,
+		grpc.WithTransportCredentials(credsClient)
+		grpc.WithPerRPCCredentials(&auth),
+	)
 	if err != nil {
 		return nil, err
 	}
