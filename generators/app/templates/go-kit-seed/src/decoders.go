@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	<% if(http){ %>
 	"encoding/json"
 	"io/ioutil"
@@ -50,13 +49,15 @@ func decode<%= endpoint.methodName %>Request(_ context.Context, r *http.Request)
 <% for(endpoint of endpoints) { %>
 func decodeGRPC<%= endpoint.methodName %>Request(_ context.Context, grpcRequest interface{}) (interface{}, error){
 	req:= grpcRequest.(*pb.<%= endpoint.methodName %>Request)
-	fmt.Println(req)
-	return <%= endpoint.methodName %>Request{},nil
+	return <%= endpoint.methodName %>Request{
+		Data: req.Data,
+	},nil
 }
 func decodeGRPC<%= endpoint.methodName %>Response(_ context.Context, grpcResponse interface{}) (interface{}, error){
 	response:= grpcResponse.(*pb.<%= endpoint.methodName %>Response)
-	fmt.Println(response)
-	return <%= endpoint.methodName %>Response{},nil
+	return <%= endpoint.methodName %>Response{
+		Data: response.Data,
+	},nil
 }
 <% } %>
 <% } %> 

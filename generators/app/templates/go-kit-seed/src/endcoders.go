@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"fmt"<% if(http){ %>
+	<% if(http){ %>
 	"encoding/json"
 	"net/http"<% } %><% if(grpc){ %>
 	"<%= org %>/<%= appName %>/pkg/pb"<% } %>
@@ -30,11 +30,13 @@ func encodeError(_ context.Context, err error, w http.ResponseWriter) {
 <% for(endpoint of endpoints) { %>
 func encodeGRPC<%= endpoint.methodName %>Request(_ context.Context, request interface{}) (interface{}, error){
 	req:= request.(<%= endpoint.methodName %>Request)
-	fmt.Println(req)
-	return &pb.<%= endpoint.methodName %>Request{},nil
+	return &pb.<%= endpoint.methodName %>Request{
+		Data: req.Data,
+	},nil
 }
 func encodeGRPC<%= endpoint.methodName %>Response(_ context.Context, request interface{}) (interface{}, error){
 	req:= request.(<%= endpoint.methodName %>Response)
-	fmt.Println(req)
-	return &pb.<%= endpoint.methodName %>Response{},nil
+	return &pb.<%= endpoint.methodName %>Response{
+		Data: req.Data,
+	},nil
 }<% } %><% } %> 

@@ -10,12 +10,12 @@ service <%= serviceCamelCase %> {
 
 <% for(endpoint of endpoints) { %>
 message <%= endpoint.methodName %>Request {
-    string id  = 1;
+    string Data  = 1;
 }
 <% } %>
 
 <% for(endpoint of endpoints) { %>
 message <%= endpoint.methodName %>Response {
-    string id  = 1;
+    string Data  = 1;
 }
 <% } %>

@@ -22,7 +22,9 @@ func Test<%= endpoint.methodName %>GRPCConnection(t *testing.T){
 	if err != nil {
 		t.Errorf(err.Error())
 	}
-	request := &pb.<%= endpoint.methodName %>Request{}
+	request := &pb.<%= endpoint.methodName %>Request{
+		Data: "<%= endpoint.methodName %>",
+	}
 
 	response, callError := client.<%= endpoint.methodName %>(context.Background(), request)
 

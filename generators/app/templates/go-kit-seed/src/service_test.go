@@ -10,7 +10,9 @@ func Test<%= endpoint.methodName %>(t *testing.T){
 
 	service := New<%= serviceCamelCase %>()
 
-	response, err := service.<%= endpoint.methodName %>(nil, <%= endpoint.methodName %>Request{})
+	response, err := service.<%= endpoint.methodName %>(nil, <%= endpoint.methodName %>Request{
+		Data: "<%= endpoint.methodName %>",
+	})
 	
 	// Fail if any error
 	if err != nil {

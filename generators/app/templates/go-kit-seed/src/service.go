@@ -26,7 +26,10 @@ func New<%= serviceCamelCase %>() <%= serviceCamelCase %>Interface {
 // <%= endpoint.methodName %> - implementing <%= serviceCamelCase %>Interface method
 func (service <%= serviceCamelCase %>) <%= endpoint.methodName %>(ctx context.Context, req <%= endpoint.methodName %>Request) (<%= endpoint.methodName %>Response, error){
 
-	response := <%= endpoint.methodName %>Response{}
+	// TODO: Implement <%= endpoint.methodName %> methods
+	response := <%= endpoint.methodName %>Response{
+		Data: fmt.Sprintf("Returned: %s",req.Data),
+	}
 	return response, nil
 }
 <% } %>
