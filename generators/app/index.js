@@ -71,6 +71,10 @@ module.exports = class extends Generator {
         parsedJson
       );
 
+      if (!parsedJson.grpc) {
+        this.fs.delete(this.destinationPath(parsedJson.appName + '/src/client.go'));
+      }
+
       this.fs.copyTpl(
         this.templatePath('go-kit-seed/_dockerignore'),
         this.destinationPath(parsedJson.appName + '/.dockerignore'),
