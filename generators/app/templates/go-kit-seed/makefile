@@ -67,8 +67,7 @@ clean-start:
 utils: utils-dep \
 	utils-reformat \
 	utils-copy-cert \
-	utils-gen-cert \
-	utils-proto \
+	<% if(grpc){ %>utils-proto \<% } %> 
 	utils-create-db
 
 utils-dep:
