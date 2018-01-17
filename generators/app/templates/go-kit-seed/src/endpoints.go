@@ -6,21 +6,22 @@ import (
 )
 
 // Endpoints - Struct containing all endpoints
-type Endpoints struct {
+type Endpoints interface {
 <% for(endpoint of endpoints) { %>
-	<%= endpoint.methodName %> endpoint.Endpoint
+	<%= endpoint.methodName %>() endpoint.Endpoint
 <% } %>
 }
+
+type endpoints struct {
+	service BeKeysServiceInterface
+}
+
 // NewEndpoints - Creates new Endpoints
 func NewEndpoints(service <%= serviceCamelCase %>Interface) Endpoints {
-	return Endpoints{
-	<% for(endpoint of endpoints) { %>
-	<%= endpoint.methodName %>: new<%= endpoint.methodName %>Endpoint(service),
-	<% } %>
-	}
+	return endpoints{service}
 }
 <% for(endpoint of endpoints) { %>
-func new<%= endpoint.methodName %>Endpoint(service <%= serviceCamelCase %>Interface) endpoint.Endpoint {
+func (e endpoints) <%= endpoint.methodName %>() endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{},error) {
 		req,ok := request.(<%= endpoint.methodName %>Request)
 
@@ -28,7 +29,7 @@ func new<%= endpoint.methodName %>Endpoint(service <%= serviceCamelCase %>Interf
 			return nil, NewError(500,"Failed to parse <%= endpoint.methodName %>Request")
 		}
 		// Endpoint logic
-		response,err := service.<%= endpoint.methodName %>(ctx,req)
+		response,err := e.service.<%= endpoint.methodName %>(ctx,req)
 		return response, err
 	}
 }
