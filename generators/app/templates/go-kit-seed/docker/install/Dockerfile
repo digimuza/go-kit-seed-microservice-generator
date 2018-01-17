@@ -13,16 +13,17 @@ RUN go get github.com/golang/dep \
 
 WORKDIR ${APPPATH}
 
-COPY /src ./src
 
 COPY /cert /cert
 
+COPY /src ./src
 COPY /pkg ./pkg
+COPY /vendor ./vendor
 
 COPY /Gopkg.lock ./Gopkg.lock
 COPY /Gopkg.toml ./Gopkg.toml
 
-RUN dep ensure
+# RUN dep ensure
 
 # WORKDIR ./src
 

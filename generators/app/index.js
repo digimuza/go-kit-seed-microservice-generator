@@ -120,8 +120,5 @@ module.exports = class extends Generator {
       );
     });
   }
-  end() {
-    // This.installDependencies();
-    console.log('asdjhaskj');
-  }
+  end() {}
 };

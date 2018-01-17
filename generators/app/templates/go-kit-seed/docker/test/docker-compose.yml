@@ -9,11 +9,17 @@ services:
       - POSTGRES_DB=${DB_NAME}
       - PGDATA=/var/lib/postgresql/data/${DB_NAME}
   test_app:
-    build:
-      context: .
-      args:
-        - ORG_NAME=${ORG_NAME}
-        - APP_NAME=${APP_NAME}
+    image: ${ORG_NAME}/${APP_NAME}:test
+    env_file:
+      - ../../.env
+    links:
+      - db:${DB_HOST}
+      - app:${APP_NAME}.${DOMAIN}
+  app:
+    image: ${ORG_NAME}/${APP_NAME}:latest
+    container_name: ${APP_NAME}
+    volumes:
+       - ../../cert:/cert
     env_file:
       - ../../.env
     links:
