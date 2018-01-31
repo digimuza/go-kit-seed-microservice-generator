@@ -4,22 +4,17 @@
   "appName": "go-sample",
   "serviceCamelCase": "SampleMicroService",
   "dbName": "sample-go-sample-db",
-  "apiUrl": "sample.docker.url",
+  "domain": "passcamp.doc",
+  "port": 443,
   "endpoints": [
     {
-      "method": "GET",
-      "path": "/{userID}",
-      "methodName": "GetUserByID"
+      "methodName": "CreateBuckets"
     },
     {
-      "method": "POST",
-      "path": "/",
-      "methodName": "CreateNewUser"
+      "methodName": "GetBucketsByIds"
     },
     {
-      "method": "PATCH",
-      "path": "/",
-      "methodName": "UpdateUser"
+      "methodName": "Cleanup"
     }
   ],
   "grpc": true,

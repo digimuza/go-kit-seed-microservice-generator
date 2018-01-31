@@ -2,20 +2,10 @@ syntax = "proto3";
 
 package pb;
 
-service <%= serviceCamelCase %> {
-<% for(endpoint of endpoints) { %>
-    rpc <%= endpoint.methodName %>(<%= endpoint.methodName %>Request) returns (<%= endpoint.methodName %>Response);
-<% } %>
+service <%= serviceName %> {
+    rpc SampleEndPoint(Data) returns (Data);
 }
 
-<% for(endpoint of endpoints) { %>
-message <%= endpoint.methodName %>Request {
+message Data {
     string Data  = 1;
 }
-<% } %>
-
-<% for(endpoint of endpoints) { %>
-message <%= endpoint.methodName %>Response {
-    string Data  = 1;
-}
-<% } %>

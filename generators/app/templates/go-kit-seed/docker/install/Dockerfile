@@ -18,13 +18,8 @@ COPY /cert /cert
 
 COPY /src ./src
 COPY /pkg ./pkg
+COPY /internal ./internal
 COPY /vendor ./vendor
 
 COPY /Gopkg.lock ./Gopkg.lock
 COPY /Gopkg.toml ./Gopkg.toml
-
-# RUN dep ensure
-
-# WORKDIR ./src
-
-# RUN go build  -ldflags '-w -s' -a -installsuffix cgo -o ${GOPATH}/bin/app

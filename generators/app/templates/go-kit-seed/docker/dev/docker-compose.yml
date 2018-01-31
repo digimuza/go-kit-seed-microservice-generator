@@ -9,6 +9,7 @@ services:
     volumes:
        - ../../cert:/cert
        - ../../src:/go/src/${ORG_NAME}/${APP_NAME}/src
+       - ../../internal:/go/src/${ORG_NAME}/${APP_NAME}/internal
        - ../../pkg:/go/src/${ORG_NAME}/${APP_NAME}/pkg
        - ../../vendor:/go/src/${ORG_NAME}/${APP_NAME}/vendor
     networks:
@@ -18,7 +19,7 @@ services:
       - "traefik.backend=${APP_NAME}"
       - "traefik.frontend.rule=Host:${APP_NAME}.${DOMAIN}"
       - "traefik.priority=10"
-
+    hostname: ${APP_NAME}.${DOMAIN}
 networks:
   web:
     external:

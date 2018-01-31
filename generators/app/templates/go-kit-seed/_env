@@ -1,6 +1,6 @@
 # App desciption
 
-TITLE=<%= title %>
+TITLE=<%= serviceName %>
 ORG_NAME=<%= org %>
 APP_NAME=<%= appName %>
 
@@ -8,6 +8,11 @@ APP_NAME=<%= appName %>
 
 DB_HOST=postgres
 DB_PORT=5432
-DB_NAME=<%= dbName %>-db
+DB_NAME=<%= appName %>-db
 DB_USER=postgres
 DB_PASS=postgres
+
+CERT_PATH=/cert/frontend.cert
+KEY_PATH=/cert/frontend.key
+DOMAIN=passcamp.doc
+APP_PORT=443
