@@ -10,48 +10,21 @@ module.exports = class extends Generator {
     super(args, opts);
 
     // This makes `config` a required argument.
-    // this.argument('config', { type: String, required: true });
+    this.argument('appName', { type: String, required: true });
+    this.argument('org', { type: String, default: 'awpc' });
 
-    // And you can then access it later; e.g.
-    this.log(this.options.config);
-  }
+    this.serviceName = this.options.appName
+      .split('-')
+      .map(element => {
+        return capitalizeFirstLetter(element);
+      })
+      .join('');
 
-  prompting() {
-    const prompts = [
-      {
-        type: 'input',
-        name: 'appName',
-        message: 'Your project name'
-      },
-      {
-        type: 'input',
-        name: 'org',
-        message: 'Your org name',
-        default: this.appname // Default to current folder name
-      }
-    ];
-
-    return this.prompt(prompts).then(props => {
-      // To access props later use this.props.someAnswer;
-      this.props = props;
-
-      this.serviceName = props.appName
-        .split('-')
-        .map(element => {
-          return capitalizeFirstLetter(element);
-        })
-        .join('');
-
-      console.log(this.serviceName);
-      this.userInput = {
-        appName: props.appName,
-        org: props.org,
-        serviceName: this.serviceName
-      };
-      // /home/andrius/Desktop/proj/go-kit-generator.json
-
-      this.dasd = this.props.someAnswer;
-    });
+    this.userInput = {
+      appName: this.options.appName,
+      org: this.options.appName,
+      serviceName: this.serviceName
+    };
   }
 
   writing() {

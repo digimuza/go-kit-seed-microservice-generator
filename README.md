@@ -5,6 +5,12 @@
 
 First, install [Yeoman](http://yeoman.io) and generator-go-kit-generator using [npm](https://www.npmjs.com/) (we assume you have pre-installed [node.js](https://nodejs.org/)).
 
+
+Remove old package
+```bash
+npm uninstall -g generator-go-kit-seed-microservice
+```
+
 ```bash
 npm install -g yo
 npm install -g generator-go-kit-seed-microservice
