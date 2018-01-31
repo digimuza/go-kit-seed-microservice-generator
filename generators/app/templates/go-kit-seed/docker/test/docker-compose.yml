@@ -24,3 +24,4 @@ services:
       - ../../.env
     links:
       - db:${DB_HOST}
+    hostname: ${APP_NAME}.${DOMAIN}

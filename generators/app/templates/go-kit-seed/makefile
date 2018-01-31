@@ -29,16 +29,21 @@ help:
 	echo "  Commands: "
 	echo
 	echo "    \033[1;32mhelp\033[0m    - show available commands"
+	echo "    \033[1;32minit\033[0m    - setup project"
 	echo "    \033[1;32mstart\033[0m   - start development"
 	echo "    \033[1;32mtest\033[0m    - run tests"
+	echo "    \033[1;32mdebug\033[0m   - run in debug mode"
 	echo "    \033[1;32mpublish\033[0m - publish image"
 	echo "    \033[1;32mdeps\033[0m    - check if all required dependencies are installed"
+	echo "    \033[1;32mutils\033[0m   - run all utils commands"
+	echo "    \033[1;32mclean\033[0m   - clean all docker images"
 	echo
 	echo "  Dependencies: "
 	echo
 	echo "    * docker $(shell which docker > /dev/null || echo '- \033[31mNOT INSTALLED\033[37m')"
 	echo "    * docker-compose $(shell which docker-compose > /dev/null || echo '- \033[31mNOT INSTALLED\033[37m')"
 	echo "    * dep $(shell which dep > /dev/null || echo '- \033[31mNOT INSTALLED\033[37m')"
+	echo "    * protoc $(shell which protoc > /dev/null || echo '- \033[31mNOT INSTALLED\033[37m')"
 	echo
 	echo
 
@@ -67,7 +72,7 @@ clean-start:
 utils: utils-dep \
 	utils-reformat \
 	utils-copy-cert \
-	<% if(grpc){ %>utils-proto \<% } %> 
+	utils-proto \
 	utils-create-db
 
 utils-dep:
@@ -79,18 +84,12 @@ utils-reformat:
 utils-copy-cert:
 	docker cp traefik:/cert .
 
-utils-gen-cert:
-	openssl req -x509 -nodes -days 365 \
-	-newkey rsa:2048 \
-	-keyout ./cert/backend.key -out ./cert/backend.cert \
-	-subj "/C=LT/ST=Lithuania/L=Kaunas/O=awpc/CN=be-keys-go""/C=LT/ST=Lithuania/L=Kaunas/O=$(ORG_NAME)/CN=*"
-
 utils-proto:
-	./protoc pb/$(APP_NAME).proto --go_out=plugins=grpc:./pkg
+	protoc pb/$(APP_NAME).proto --go_out=plugins=grpc:./pkg
 
 utils-create-db:
 	docker exec \
-		-itu postgres postgres \
+		-itu $(DB_USER) $(DB_PASS) \
 		psql -c "SELECT create_db('$(DB_NAME)')"
 
 # Build docker images
@@ -149,8 +148,9 @@ test: clean-container clean-test build-install build-prod build-test
 
 debug: stop clean-container build-install build-debug
 	docker run \
+		--hostname=$(APP_NAME).$(DOMAIN) \
 		--security-opt=seccomp:unconfined \
-		--network=awpc_webgateway \
+		--network=$(ORG_NAME)_webgateway \
 		--env-file=.env \
       	-l traefik.protocol="https" \
       	-l traefik.backend="${APP_NAME}" \
