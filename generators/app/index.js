@@ -11,7 +11,6 @@ module.exports = class extends Generator {
 
     // This makes `config` a required argument.
     this.argument('appName', { type: String, required: true });
-    this.argument('org', { type: String, default: 'awpc' });
 
     this.serviceName = this.options.appName
       .split('-')
@@ -22,7 +21,7 @@ module.exports = class extends Generator {
 
     this.userInput = {
       appName: this.options.appName,
-      org: this.options.appName,
+      org: 'awpc',
       serviceName: this.serviceName
     };
   }
