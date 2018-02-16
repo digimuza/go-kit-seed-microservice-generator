@@ -1,109 +1,95 @@
 'use strict';
 const Generator = require('yeoman-generator');
 
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
 module.exports = class extends Generator {
   constructor(args, opts) {
     super(args, opts);
 
-    // This makes `config` a required argument.
-    this.argument('appName', { type: String, required: true });
-
-    this.serviceName = this.options.appName
-      .split('-')
-      .map(element => {
-        return capitalizeFirstLetter(element);
-      })
-      .join('');
-
-    this.userInput = {
-      appName: this.options.appName,
-      org: 'awpc',
-      serviceName: this.serviceName
+    this.setup = {
+      protoName: 'sample',
+      appName: 'be-sample',
+      serviceName: 'SamplePairService',
+      methods: [
+        {
+          methodName: 'Get'
+        }
+      ]
     };
   }
 
   writing() {
     this.fs.copyTpl(
-      this.templatePath('go-kit-seed/.vscode'),
-      this.destinationPath(this.userInput.appName + '/.vscode'),
-      this.userInput
+      this.templatePath('go-kit-seed/_vscode'),
+      this.destinationPath(this.setup.appName + '/.vscode'),
+      this.setup
     );
-
     this.fs.copyTpl(
-      this.templatePath('go-kit-seed/pb/service.proto'),
-      this.destinationPath(
-        this.userInput.appName + '/pb/' + this.userInput.appName + '.proto'
-      ),
-      this.userInput
+      this.templatePath('go-kit-seed/build'),
+      this.destinationPath(this.setup.appName + '/build'),
+      this.setup
     );
-
-    this.fs.copy(
-      this.templatePath('go-kit-seed/pkg'),
-      this.destinationPath(this.userInput.appName + '/pkg')
-    );
-
     this.fs.copyTpl(
-      this.templatePath('go-kit-seed/docker'),
-      this.destinationPath(this.userInput.appName + '/docker'),
-      this.userInput
+      this.templatePath('go-kit-seed/cmd'),
+      this.destinationPath(this.setup.appName + '/cmd'),
+      this.setup
     );
-
-    this.fs.copyTpl(
-      this.templatePath('go-kit-seed/src'),
-      this.destinationPath(this.userInput.appName + '/src'),
-      this.userInput
-    );
-
     this.fs.copyTpl(
       this.templatePath('go-kit-seed/internal'),
-      this.destinationPath(this.userInput.appName + '/internal'),
-      this.userInput
+      this.destinationPath(this.setup.appName + '/internal'),
+      this.setup
     );
-
+    this.fs.copyTpl(
+      this.templatePath('go-kit-seed/pkg/endpoints'),
+      this.destinationPath(this.setup.appName + '/pkg/endpoints'),
+      this.setup
+    );
+    this.fs.copyTpl(
+      this.templatePath('go-kit-seed/pkg/pb/proto/service.proto'),
+      this.destinationPath(
+        this.setup.appName +
+          `/pkg/pb/${this.setup.protoName}/${this.setup.protoName}.proto`
+      ),
+      this.setup
+    );
+    this.fs.copyTpl(
+      this.templatePath('go-kit-seed/pkg/service'),
+      this.destinationPath(this.setup.appName + '/pkg/service'),
+      this.setup
+    );
+    this.fs.copyTpl(
+      this.templatePath('go-kit-seed/pkg/transport'),
+      this.destinationPath(this.setup.appName + '/pkg/transport'),
+      this.setup
+    );
+    this.fs.copyTpl(
+      this.templatePath('go-kit-seed/pkg/utils'),
+      this.destinationPath(this.setup.appName + '/pkg/utils'),
+      this.setup
+    );
     this.fs.copyTpl(
       this.templatePath('go-kit-seed/_dockerignore'),
-      this.destinationPath(this.userInput.appName + '/.dockerignore'),
-      this.userInput
+      this.destinationPath(this.setup.appName + '/.dockerignore'),
+      this.setup
     );
-
     this.fs.copyTpl(
       this.templatePath('go-kit-seed/_gitignore'),
-      this.destinationPath(this.userInput.appName + '/.gitignore'),
-      this.userInput
+      this.destinationPath(this.setup.appName + '/.gitignore'),
+      this.setup
     );
-
     this.fs.copyTpl(
       this.templatePath('go-kit-seed/_env'),
-      this.destinationPath(this.userInput.appName + '/.env'),
-      this.userInput
+      this.destinationPath(this.setup.appName + '/.env'),
+      this.setup
     );
-
     this.fs.copyTpl(
-      this.templatePath('go-kit-seed/README.md'),
-      this.destinationPath(this.userInput.appName + '/README.md'),
-      this.userInput
+      this.templatePath('go-kit-seed/glide.yaml'),
+      this.destinationPath(this.setup.appName + '/glide.yaml'),
+      this.setup
     );
-
     this.fs.copyTpl(
       this.templatePath('go-kit-seed/makefile'),
-      this.destinationPath(this.userInput.appName + '/makefile'),
-      this.userInput
-    );
-
-    this.fs.copyTpl(
-      this.templatePath('go-kit-seed/Gopkg.lock'),
-      this.destinationPath(this.userInput.appName + '/Gopkg.lock'),
-      this.userInput
-    );
-
-    this.fs.copyTpl(
-      this.templatePath('go-kit-seed/Gopkg.toml'),
-      this.destinationPath(this.userInput.appName + '/Gopkg.toml'),
-      this.userInput
+      this.destinationPath(this.setup.appName + '/makefile'),
+      this.setup
     );
   }
   end() {}

@@ -1,7 +1,7 @@
 [![N|Solid](https://www.passcamp.com/wp-content/uploads/2017/11/PassCampColor.png)](https://pass.camp/start/login)
 
-# PassCamp <%= appName %> microservice
-Microservice that store users private and public keys.
+# PassCamp <%= serviceName %> microservice
+Microservice that store buckets.
 
 # Development best practices - (GO KIT)
 [Go kit](https://github.com/go-kit/kit) is a programming toolkit for building microservices (or elegant monoliths) in Go.
@@ -10,10 +10,14 @@ Microservice that store users private and public keys.
 
   - [Docker](https://docs.docker.com/) - [INSTALATION GUIDE](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-16-04)
   - [docker-compose](https://docs.docker.com/compose/) - 1.18.0
-  - [golang/dep](https://github.com/golang/dep) - go get -u github.com/golang/dep/cmd/dep
-  - [google/protobuf](https://github.com/google/protobuf/releases) - Put bin folder to /usr/local
+  - [glide](https://github.com/Masterminds/glide) - go get -u github.com/Masterminds/glide
+  - [google/protobuf](https://github.com/google/protobuf/releases) - put bin && includes files to /usr/local
+      DOWNLOAD - realese package for your mashine - [3.5.1-linux-x86_64.zip](https://github.com/google/protobuf/releases/download/v3.5.1/protoc-3.5.1-linux-x86_64.zip)
+      EXTRACT zip package and move bin && includes folders to /usr/local
+
   - [golang/protobuf](https://github.com/golang/protobuf) - go get -u github.com/golang/protobuf/protoc-gen-go
-  - [awpc-dev-stack](https://dev.adeoweb.biz:8453/projects/PAS/repos/dev-stack/browse?at=refs/heads/master) - 1.0 
+
+
 
 ### Install go 
 
@@ -24,61 +28,44 @@ export PATH=$PATH:/usr/local/go/bin
 export GOPATH=$HOME/go
 ```
 
-### Setup /etc/hosts file
-```sh
-127.0.0.1       *******
-127.0.1.1       *******
-127.0.0.1       *******
-127.0.0.1       be-buckets.passcamp.doc
-127.0.0.1       postgres
-127.0.0.1       *******
-127.0.1.1       *******
-127.0.0.1       *******
-```
-
 ### Prepare for setup
 
-  - Create folder <awpc> in $GOPATH/src/ 
-  - Install and start [awpc-dev-stack](https://dev.adeoweb.biz:8453/projects/PAS/repos/dev-stack/browse?at=refs/heads/master)
-
-### Initial Setup 
-```sh
-$ make init
-```
+  - Create folders $GOPATH/src/pas/dev.adeoweb.biz/pas
+  - Clone git repository git clone https://dbarzdys@dev.adeoweb.biz:8453/scm/pas/<%= appName %>.git
 
 ### Check dependencies
 ```sh
 $ make help
 ```
 
-### Build microservice 
+### Initial Setup 
 ```sh
-$ make build
+$ make init
 ```
 
 ### How to install new dependency?
 It's easy just use:
 ```sh
-$ go get github.com/asaskevich/govalidator
+$ glide update
 ```
 
 ### Start 
-Make sure that [awpc-dev-stack](https://dev.adeoweb.biz:8453/projects/PAS/repos/dev-stack/browse?at=refs/heads/master) is running:
 ```sh
 $ make start
 ```
-
-### Run single test || all tests from vscode editor
-Make sure that [awpc-dev-stack](https://dev.adeoweb.biz:8453/projects/PAS/repos/dev-stack/browse?at=refs/heads/master) and be-keys microservice is running. Use vscode run test command.
+This command will spin up development environment.
+- localhost:3000 - letmegrpc
+- localhost:5050 - adminer
+- localhost:9090 - prometheus
+- localhost:9411 - zipkin
+- localhost:5000 - grafana
 
 ### Run all test in an isolated environment. 
-Make sure that [awpc-dev-stack](https://dev.adeoweb.biz:8453/projects/PAS/repos/dev-stack/browse?at=refs/heads/master) is running:
 ```sh
 $ make tests
 ```
 
 ### Debug 
-Make sure that [awpc-dev-stack](https://dev.adeoweb.biz:8453/projects/PAS/repos/dev-stack/browse?at=refs/heads/master) is running: After that use vscode debug with Remote configuration
 ```sh
 $ make debug
 ```

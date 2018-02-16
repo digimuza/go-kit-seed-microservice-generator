@@ -1,18 +1,41 @@
-# App desciption
+# App config
 
 TITLE=<%= serviceName %>
-ORG_NAME=<%= org %>
+ORG_NAME=awpc
 APP_NAME=<%= appName %>
+PB_PATH=<%= serviceName %>
+PROJECT_PATH=dev.adeoweb.biz/pas
 
-# Custom variables
+# Database config
 
+DB_DRIVER=postgres
 DB_HOST=postgres
 DB_PORT=5432
-DB_NAME=<%= appName %>-db
+DB_NAME=be-buckets-db
 DB_USER=postgres
 DB_PASS=postgres
 
-CERT_PATH=/cert/frontend.cert
-KEY_PATH=/cert/frontend.key
+# SSL config
+
+SSL_ENABLED=false
+SSL_CERT_PATH=/cert/frontend.cert
+SSL_KEY_PATH=/cert/frontend.key
+
+# Transport
+
 DOMAIN=passcamp.doc
-APP_PORT=443
+PORT=443
+
+# Logger config
+
+LOG_LEVEL=debug
+LOG_ENABLED=true
+
+# Zipkin config
+
+ZIPKIN_HOST=zipkin
+ZIPKIN_PORT=9411
+
+# Prometheus config
+
+PROMETHEUS_METRICS_PORT=9090

@@ -1,0 +1,59 @@
+version: '3'
+services:
+  app:
+    image: ${ORG_NAME}/${APP_NAME}:dev
+    container_name: ${APP_NAME}
+    env_file:
+      - ../../.env
+    restart: on-failure
+    volumes:
+       - ../../cert:/cert
+       - ../../cmd:/go/src/${PROJECT_PATH}/${APP_NAME}/cmd
+       - ../../internal:/go/src/${PROJECT_PATH}/${APP_NAME}/internal
+       - ../../pkg:/go/src/${PROJECT_PATH}/${APP_NAME}/pkg
+       - ../../vendor:/go/src/${PROJECT_PATH}/${APP_NAME}/vendor
+    ports:
+      - "443:443"
+  gui:
+    image: letmegrpc:dev
+    volumes: 
+     - ../../pkg/pb/${PB_PATH}:/var/letmegrpc/protos
+    environment: 
+     - PROTO_FILE=${APP_NAME}.proto
+     - SERVICE_ADDRESS=${APP_NAME}:${PORT}
+    ports:
+     - 3000:8080
+  consul:
+    container_name: consul
+    image: consul
+  grafana:
+    container_name: grafana
+    image: grafana/grafana
+    ports:
+      - 5000:3000
+  postgres:
+    container_name: postgres
+    build:
+      context: postgres
+      dockerfile: Dockerfile
+    ports:
+      - 5432:5432
+  prometheus:
+    container_name: prometheus
+    image: quay.io/prometheus/prometheus
+    volumes:
+     - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin
+    environment:
+      - STORAGE_TYPE=mem
+    ports:
+      - 9411:9411
+  adminer:
+    image: adminer
+    container_name: adminer
+    ports:
+      - "5050:8080"

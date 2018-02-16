@@ -1,4 +1,3 @@
 /vendor
 /cert
 /**/*.test
-/pkg/pb

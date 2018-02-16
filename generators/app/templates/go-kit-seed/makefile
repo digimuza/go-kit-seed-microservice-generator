@@ -8,7 +8,8 @@ define docker_build
 	docker build \
 		--build-arg ORG_NAME=$(ORG_NAME) \
 		--build-arg APP_NAME=$(APP_NAME) \
-		-f docker/${1}/Dockerfile \
+		--build-arg PROJECT_PATH=$(PROJECT_PATH) \
+		-f build/${1}/Dockerfile \
 		-t $(ORG_NAME)/$(APP_NAME):${1} \
 		${2}
 endef
@@ -42,7 +43,7 @@ help:
 	echo
 	echo "    * docker $(shell which docker > /dev/null || echo '- \033[31mNOT INSTALLED\033[37m')"
 	echo "    * docker-compose $(shell which docker-compose > /dev/null || echo '- \033[31mNOT INSTALLED\033[37m')"
-	echo "    * dep $(shell which dep > /dev/null || echo '- \033[31mNOT INSTALLED\033[37m')"
+	echo "    * glide $(shell which glide > /dev/null || echo '- \033[31mNOT INSTALLED\033[37m')"
 	echo "    * protoc $(shell which protoc > /dev/null || echo '- \033[31mNOT INSTALLED\033[37m')"
 	echo
 	echo
@@ -58,39 +59,33 @@ clean-container:
 
 clean-test: 
 	docker-compose \
-		-f docker/test/docker-compose.yml \
+		-f build/test/docker-compose.yml \
 		rm -fsv || true
 
 clean-start:
 	docker-compose \
-		-f docker/dev/docker-compose.yml \
+		-f build/dev/docker-compose.yml \
 		-p $(APP_NAME) \
 		rm -fsv || true
+	docker-compose \
+		-f build/dev/docker-compose.yml \
+		-p $(APP_NAME) \
+		build
 
 # Utils
 
-utils: utils-dep \
+utils: utils-glide \
 	utils-reformat \
-	utils-copy-cert \
-	utils-proto \
-	utils-create-db
+	utils-proto
 
-utils-dep:
-	dep ensure
+utils-glide:
+	glide install
 
 utils-reformat: 
-	go fmt ./src
-
-utils-copy-cert:
-	docker cp traefik:/cert .
+	go fmt ./...
 
 utils-proto:
-	protoc pb/$(APP_NAME).proto --go_out=plugins=grpc:./pkg
-
-utils-create-db:
-	docker exec \
-		-itu $(DB_USER) $(DB_PASS) \
-		psql -c "SELECT create_db('$(DB_NAME)')"
+	protoc pkg/pb/${PB_PATH}/${APP_NAME}.proto --go_out=plugins=grpc:./
 
 # Build docker images
 
@@ -102,25 +97,25 @@ build: build-base \
 	build-test
 
 build-base:
-	$(call docker_build,base,docker/base)
+	$(call docker_build,base,build/base)
 
 build-go:
-	$(call docker_build,go,docker/go)
+	$(call docker_build,go,build/go)
 
 build-install:
 	$(call docker_build,install,.)
 
 build-prod:
-	$(call docker_build,latest,docker/latest)
+	$(call docker_build,latest,build/latest)
 
 build-dev:
-	$(call docker_build,dev,docker/dev)
+	$(call docker_build,dev,build/dev)
 
 build-test: 
-	$(call docker_build,test,docker/test)
+	$(call docker_build,test,build/test)
 
 build-debug: 
-	$(call docker_build,debug,docker/debug)
+	$(call docker_build,debug,build/debug)
 
 # Commands
 
@@ -128,22 +123,25 @@ init: utils build
 
 stop:
 	docker-compose \
-		-f docker/dev/docker-compose.yml \
+		-f build/dev/docker-compose.yml \
 		-p $(APP_NAME) \
 		stop
 
-start: utils-reformat clean-container
+start: clean-container
 	docker-compose \
-		-f docker/dev/docker-compose.yml \
+		-f build/dev/docker-compose.yml \
 		-p $(APP_NAME) \
 		up
 
 publish: build-prod
 	docker push $(ORG_NAME)/$(APP_NAME):latest
 
-test: clean-container clean-test build-install build-prod build-test
+test: 
+	go test ./pkg/... -cover
+
+test-integration: clean-container clean-test build-install build-prod build-test
 	docker-compose \
-		-f docker/test/docker-compose.yml \
+		-f build/test/docker-compose.yml \
 		up 
 
 debug: stop clean-container build-install build-debug

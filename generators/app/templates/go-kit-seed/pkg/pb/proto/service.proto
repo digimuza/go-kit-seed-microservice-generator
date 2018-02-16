@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+
+package <%= protoName %>;
+
+service <%= serviceName %> {<% for (endpoint of methods) { %>
+    rpc <%= endpoint.methodName %>(<%= endpoint.methodName %>Request) returns (<%= endpoint.methodName %>Response);<% } %>
+}
+<% for (endpoint of methods) { %> 
+message <%= endpoint.methodName %>Request {
+    string Data = 1;
+}
+message <%= endpoint.methodName %>Response {
+    string Data = 1;
+}
+<% } %>
